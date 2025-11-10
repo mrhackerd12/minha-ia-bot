@@ -14,11 +14,12 @@ RUN curl -fsSL https://ollama.ai/install.sh | sh
 COPY requirements.txt .
 RUN pip3 install -r requirements.txt
 
-# Copia app
+# Copia arquivos
 COPY app.py .
+COPY start.sh .
 
 # Expõe porta do Flask
 EXPOSE 8080
 
-# Inicia ambos serviços
-CMD python3 app.py & ollama serve
+# Usa o script de inicialização
+CMD ["./start.sh"]
