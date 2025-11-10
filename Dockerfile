@@ -10,8 +10,15 @@ RUN apt-get update && apt-get install -y \
 # Instala Ollama
 RUN curl -fsSL https://ollama.ai/install.sh | sh
 
-# Expõe porta
+# Instala Python dependencies
+COPY requirements.txt .
+RUN pip3 install -r requirements.txt
+
+# Copia app
+COPY app.py .
+
+# Expõe porta do Flask
 EXPOSE 8080
 
-# Inicia Ollama
-CMD ["ollama", "serve"]
+# Inicia ambos serviços
+CMD python3 app.py & ollama serve
