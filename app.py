@@ -5,10 +5,10 @@ import time
 
 app = Flask(__name__)
 
-# === CONFIGURAÇÃO 100% SEGURA ===
-HUGGING_FACE_TOKEN = os.environ.get('HUGGING_FACE_TOKEN', 'CONFIGURAR_NO_RENDER')
+# === CONFIGURAÇÃO CORRIGIDA ===
+HUGGING_FACE_TOKEN = os.environ.get('HUGGING_FACE_TOKEN')
 API_URL = "https://api-inference.huggingface.co/models/microsoft/DialoGPT-large"
-headers = {"Authorization": f"Bearer {HUGGING_FACE_TOKEN}"} if HUGGING_FACE_TOKEN != 'CONFIGURAR_NO_RENDER' else {}
+headers = {"Authorization": f"Bearer {HUGGING_FACE_TOKEN}"} if HUGGING_FACE_TOKEN else {}
 
 HTML = """
 <!DOCTYPE html>
@@ -365,7 +365,7 @@ def home():
 @app.route('/api-status')
 def api_status():
     """Verifica status da API"""
-    if HUGGING_FACE_TOKEN == 'CONFIGURAR_NO_RENDER':
+    if not HUGGING_FACE_TOKEN:
         return jsonify({"api_online": False})
     
     try:
@@ -385,7 +385,7 @@ def chat():
             return jsonify({"response": "🌸 Diga algo para mim, meu amor! 💕"})
         
         # Se API não configurada
-        if HUGGING_FACE_TOKEN == 'CONFIGURAR_NO_RENDER':
+        if not HUGGING_FACE_TOKEN:
             if 'configurar' in user_message.lower() or 'api' in user_message.lower():
                 return jsonify({
                     "response": "🌸 **Como configurar a API:** 💕\n\n1. Acesse Render.com → minha-ia-bot\n2. Vá em Settings → Environment Variables\n3. Adicione: HUGGING_FACE_TOKEN = seu_token\n4. Reinicie o serviço\n\n🧠 Assim ativo minha inteligência avançada!"
